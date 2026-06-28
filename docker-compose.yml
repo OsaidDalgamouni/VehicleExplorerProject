@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+
+    container_name: vehicle-api
+
+    ports:
+      - "5000:8080"
+
+    restart: unless-stopped
+
+  angular:
+    build:
+      context: ./Web/AngVehicleExplorer
+      dockerfile: Dockerfile
+
+    container_name: vehicle-ui
+
+    ports:
+      - "4200:80"
+
+    depends_on:
+      - api
+
+    restart: unless-stopped

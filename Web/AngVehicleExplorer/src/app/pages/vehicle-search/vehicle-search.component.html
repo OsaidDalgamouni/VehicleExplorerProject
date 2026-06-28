@@ -1,0 +1,204 @@
+<div class="container py-5">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-header bg-primary text-white py-3">
+
+            <h3 class="mb-1 fw-bold">
+                🚗 Vehicle Explorer
+            </h3>
+        </div>
+
+        <div class="card-body p-4">
+            <form [formGroup]="form">
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+
+                            <label class="form-label fw-bold">
+                               Vehicle Make
+                            </label>
+
+                            <p-autoComplete
+                                formControlName="make"
+                                field="make_Name"
+                                [suggestions]="filteredMakes"
+                                (completeMethod)="filterMakes($event)"
+                                (onSelect)="onMakeSelected($event)"
+                                placeholder="Search Make"
+                                styleClass="w-100"
+                                inputStyleClass="w-100"
+                                [inputStyle]="{'width':'100%'}">
+                            </p-autoComplete>
+                        </div>
+
+                        <div class="col-lg-4">
+
+                            <label class="form-label fw-bold">
+                                Vehicle Type
+                            </label>
+
+                            <p-dropdown
+                                formControlName="vehicleType"
+                                [options]="vehicleTypes"
+                                optionLabel="vehicleTypeName"
+                                placeholder="Select Vehicle Type"
+                                [style]="{'width':'100%'}">
+                            </p-dropdown>
+
+                        </div>
+
+                        <div class="col-lg-4">
+
+                            <label class="form-label fw-bold">
+                                Year
+                            </label>
+
+                            <input
+                                class="form-control"
+                                type="number"
+                                formControlName="year"
+                                min="1900"
+                                [max]="currentYear + 1">
+
+                        </div>
+
+                    </div>
+
+                <div class="mt-4 text-end">
+
+                    <button class="btn btn-primary btn-lg px-5" type="button"(click)="search()" [disabled]="form.invalid">
+                        🔍 Search
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="card shadow-lg border-0 rounded-4 mt-4">
+
+        <div class="card-header bg-light">
+
+            <div class="row align-items-center">
+
+                <div class="col-md-6">
+                    <h5 class="mb-0 fw-bold text-primary">Vehicle Models</h5>
+                </div>
+
+                <div class="col-md-6 text-end">
+
+                    <label class="me-2 fw-bold">Page Size</label>
+
+                    <select class="form-select d-inline-block w-auto"  [value]="pageSize"(change)="pageSizeChanged($event)">
+                        <option [value]="5">5</option>
+                        <option [value]="10">10</option>
+                        <option [value]="20">20</option>
+                        <option [value]="50">50</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover table-striped align-middle">
+
+                    <thead class="table-primary">
+
+                        <tr>
+                            <th width="80">#</th>
+                            <th>Model Name</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr *ngFor="let model of models; let i=index">
+                            <td>
+
+                                {{ (pageNumber-1)*pageSize+i+1 }}
+
+                            </td>
+                            <td>
+
+                                {{ model.model_Name }}
+
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="models.length==0">
+                            <td colspan="2" class="text-center py-5 text-muted">
+
+                                No Models Found
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="row mt-3 align-items-center">
+
+                <div class="col-md-6">
+
+                    <p class="text-muted">
+                        Showing {{showingFrom}} - {{showingTo}} of {{totalRecords}}   models
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <nav>
+
+                        <ul class="pagination justify-content-end mb-0">
+
+                            <li
+                                class="page-item"
+                                [class.disabled]="pageNumber==1">
+
+                                <button class="page-link"(click)="changePage(pageNumber-1)">
+                                  Previous
+                                </button>
+
+                            </li>
+
+                            <li class="page-item active">
+
+                                <span class="page-link">
+                                    {{pageNumber}}
+                                </span>
+
+                            </li>
+
+                            <li class="page-item" [class.disabled]="pageNumber>=totalPages">
+
+                                <button class="page-link"(click)="changePage(pageNumber+1)">Next</button>
+
+                            </li>
+
+                        </ul>
+
+                    </nav>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
